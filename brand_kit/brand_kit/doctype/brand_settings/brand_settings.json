@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "creation": "2026-07-07 16:30:00.000000",
+ "description": "Central place to manage UI branding (app name) across Desk, login, website and Raven.",
+ "doctype": "DocType",
+ "document_type": "Other",
+ "engine": "InnoDB",
+ "field_order": [
+  "app_name"
+ ],
+ "fields": [
+  {
+   "description": "The name shown in Desk title, login page, website pages and Raven's page title.",
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "label": "App Name",
+   "reqd": 1
+  }
+ ],
+ "icon": "fa fa-paint-brush",
+ "idx": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-07 16:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brand Kit",
+ "name": "Brand Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}
