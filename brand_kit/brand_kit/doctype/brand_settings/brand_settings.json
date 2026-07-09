@@ -13,8 +13,7 @@
    "description": "The name shown in Desk title, login page, website pages and Raven's page title.",
    "fieldname": "app_name",
    "fieldtype": "Data",
-   "label": "App Name",
-   "reqd": 1
+   "label": "App Name"
   }
  ],
  "icon": "fa fa-paint-brush",

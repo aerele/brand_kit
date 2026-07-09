@@ -96,6 +96,13 @@ update_website_context = "brand_kit.utils.branding.update_website_context"
 
 after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
 
+# Boot Session
+# ------------
+# Overrides each app's boot-time "app_title" (read by the Desk sidebar's app subtitle)
+# with its App UI Settings display_name, when one is set.
+
+extend_bootinfo = "brand_kit.utils.app_ui_settings.extend_bootinfo"
+
 # Installation
 # ------------
 

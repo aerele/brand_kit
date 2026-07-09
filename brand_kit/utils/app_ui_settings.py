@@ -67,3 +67,16 @@ def sync_display_names_to_translations(doc, method):
 						}
 					).insert(ignore_permissions=True)
 	frappe.clear_cache()
+
+
+def extend_bootinfo(bootinfo):
+	overrides = {
+		row.app_name: row.display_name
+		for row in frappe.get_all("App UI Setting", fields=["app_name", "display_name"])
+		if row.display_name
+	}
+	if not overrides:
+		return
+	for app in bootinfo.get("app_data") or []:
+		if app.get("app_name") in overrides:
+			app["app_title"] = overrides[app["app_name"]]
