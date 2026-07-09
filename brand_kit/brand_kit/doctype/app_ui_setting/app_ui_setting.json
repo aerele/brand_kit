@@ -32,12 +32,11 @@
    "reqd": 1
   },
   {
-   "description": "Edit this to change how the app's name appears in the UI.",
+   "description": "Optional. Leave blank to keep the app's existing (default) name; fill in to override it.",
    "fieldname": "display_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Display Name",
-   "reqd": 1
+   "label": "Display Name"
   }
  ],
  "istable": 1,

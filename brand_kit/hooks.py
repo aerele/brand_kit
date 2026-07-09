@@ -153,10 +153,14 @@ after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
 # Hook on document methods and events
 
 doc_events = {
-	"Installed Applications": {
-		"before_save": "brand_kit.utils.installed_apps_override.restore_custom_display_names",
-		"on_update": "brand_kit.utils.installed_apps_override.sync_display_names_to_translations",
-	}
+	# "Installed Applications": {
+	# 	"before_save": "brand_kit.utils.installed_apps_override.restore_custom_display_names",
+	# 	"on_update": "brand_kit.utils.installed_apps_override.sync_display_names_to_translations",
+	# }
+
+	"App UI Settings": {
+		"on_update": "brand_kit.utils.app_ui_settings.sync_display_names_to_translations",
+	},
 }
 
 # Scheduled Tasks

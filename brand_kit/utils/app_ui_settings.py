@@ -1,5 +1,7 @@
 import frappe
 
+from brand_kit.utils.installed_apps_override import get_apps_screen_titles, get_single_workspace_label
+
 EXCLUDED_APPS = {"frappe", "brand_kit"}
 
 
@@ -23,10 +25,45 @@ def sync_installed_apps():
 			{
 				"app_name": app,
 				"original_app_name": title,
-				"display_name": title,
+				"display_name": "",
 			},
 		)
 		changed = True
 
 	if changed:
 		settings.save(ignore_permissions=True)
+
+
+def sync_display_names_to_translations(doc, method):
+	before = doc.get_doc_before_save()
+	old_values = {r.app_name: r.display_name for r in (before.apps if before else [])}
+
+	for row in doc.apps:
+		if row.display_name == old_values.get(row.app_name):
+			continue  # unchanged for this app - skip entirely, no DB work
+
+		titles = set(get_apps_screen_titles(row.app_name))
+		workspace_label = get_single_workspace_label(row.app_name)
+		if workspace_label:
+			titles.add(workspace_label)
+		app_title = frappe.get_hooks("app_title", app_name=row.app_name)
+		if app_title:
+			titles.add(app_title[0])
+
+		for title in titles:
+			if not row.display_name or row.display_name == title:
+				frappe.db.delete("Translation", {"source_text": title, "language": "en"})
+			else:
+				existing = frappe.db.exists("Translation", {"source_text": title, "language": "en"})
+				if existing:
+					frappe.db.set_value("Translation", existing, "translated_text", row.display_name)
+				else:
+					frappe.get_doc(
+						{
+							"doctype": "Translation",
+							"source_text": title,
+							"language": "en",
+							"translated_text": row.display_name,
+						}
+					).insert(ignore_permissions=True)
+	frappe.clear_cache()
