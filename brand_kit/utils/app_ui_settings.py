@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import frappe
 
 from brand_kit.utils.installed_apps_override import get_apps_screen_titles, get_single_workspace_label
@@ -70,13 +73,50 @@ def sync_display_names_to_translations(doc, method):
 
 
 def extend_bootinfo(bootinfo):
-	overrides = {
-		row.app_name: row.display_name
-		for row in frappe.get_all("App UI Setting", fields=["app_name", "display_name"])
-		if row.display_name
-	}
-	if not overrides:
+	rows = frappe.get_all("App UI Setting", fields=["app_name", "display_name", "logo"])
+	title_overrides = {row.app_name: row.display_name for row in rows if row.display_name}
+	logo_overrides = {row.app_name: row.logo for row in rows if row.logo}
+	if not title_overrides and not logo_overrides:
 		return
 	for app in bootinfo.get("app_data") or []:
-		if app.get("app_name") in overrides:
-			app["app_title"] = overrides[app["app_name"]]
+		app_name = app.get("app_name")
+		if app_name in title_overrides:
+			app["app_title"] = title_overrides[app_name]
+		if app_name in logo_overrides:
+			app["app_logo_url"] = logo_overrides[app_name]
+
+
+def get_logo_asset_path(app_name):
+	hooks = frappe.get_hooks("add_to_apps_screen", app_name=app_name)
+	if not hooks or not hooks[0].get("logo"):
+		return None
+	relative = hooks[0]["logo"].split(f"/assets/{app_name}/", 1)[-1]
+	return frappe.get_app_path(app_name, "public", relative)
+
+
+def get_uploaded_file_path(file_url):
+	if file_url.startswith("/private/files/"):
+		return frappe.get_site_path("private", "files", file_url.rsplit("/", 1)[-1])
+	return frappe.get_site_path("public", "files", file_url.rsplit("/", 1)[-1])
+
+
+def sync_logos_to_static_assets(doc, method):
+	before = doc.get_doc_before_save()
+	old_logos = {r.app_name: r.logo for r in (before.apps if before else [])}
+
+	for row in doc.apps:
+		if row.logo == old_logos.get(row.app_name):
+			continue
+
+		dest = get_logo_asset_path(row.app_name)
+		if not dest:
+			continue
+		backup = dest + ".original"
+
+		if row.logo:
+			if os.path.exists(dest) and not os.path.exists(backup):
+				shutil.copyfile(dest, backup)
+			shutil.copyfile(get_uploaded_file_path(row.logo), dest)
+		elif os.path.exists(backup):
+			shutil.copyfile(backup, dest)
+	frappe.clear_cache()

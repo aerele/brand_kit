@@ -9,7 +9,8 @@
  "field_order": [
   "app_name",
   "original_app_name",
-  "display_name"
+  "display_name",
+  "logo"
  ],
  "fields": [
   {
@@ -37,6 +38,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Display Name"
+  },
+  {
+   "description": "Optional. Upload a custom logo to replace the app's default icon in the Desk sidebar.",
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo"
   }
  ],
  "istable": 1,

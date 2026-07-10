@@ -166,7 +166,10 @@ doc_events = {
 	# }
 
 	"App UI Settings": {
-		"on_update": "brand_kit.utils.app_ui_settings.sync_display_names_to_translations",
+		"on_update": [
+			"brand_kit.utils.app_ui_settings.sync_display_names_to_translations",
+			"brand_kit.utils.app_ui_settings.sync_logos_to_static_assets",
+		],
 	},
 }
 
