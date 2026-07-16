@@ -6,12 +6,12 @@ default application display names.
 
 DEFAULT_APP_DISPLAY_NAMES: dict[str, str] = {
 	"ERPNext": "Nithra ERPNext",
-	"Frappe HR (HRMS)": "Nithra HRMS",
-	"CRM": "Nithra CRM",
+	"Frappe HR": "Nithra HRMS",
+	"Frappe CRM": "Nithra CRM",
 	"Helpdesk": "Nithra Desk",
-	"Learning (LMS)": "Nithra Learning",
+	"LMS": "Nithra Learning",
 	"Insights": "Nithra Insights",
-	"Builder": "Nithra Builder",
+	"Frappe Builder": "Nithra Builder",
 	"Drive": "Nithra Drive",
 	"Lending": "Nithra Lending",
 	"Wiki": "Nithra Wiki",
@@ -19,4 +19,5 @@ DEFAULT_APP_DISPLAY_NAMES: dict[str, str] = {
 	"Raven": "Nithra Teams",
 	"Gameplan": "Nithra Task",
 	"Mail": "Nithra Mail",
+    "Telephony": "Nithra Telephony"
 }

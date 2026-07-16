@@ -4,6 +4,7 @@ import shutil
 import frappe
 
 from brand_kit.utils.installed_apps_override import get_apps_screen_titles, get_single_workspace_label
+from brand_kit.branding.app_display_names import DEFAULT_APP_DISPLAY_NAMES
 
 EXCLUDED_APPS = {"frappe", "brand_kit"}
 
@@ -13,13 +14,29 @@ def get_app_title(app):
 	return titles[0] if titles else app
 
 
-def sync_installed_apps():
+def sync_installed_apps(doc=None, method=None):
 	settings = frappe.get_single("App UI Settings")
-	existing = {row.app_name for row in settings.apps}
+	before_count = len(settings.apps)
+
+	installed_apps = set(frappe.get_installed_apps()) - EXCLUDED_APPS
 
 	changed = False
-	for app in frappe.get_installed_apps():
-		if app in EXCLUDED_APPS or app in existing:
+
+	# remove apps that are no longer installed
+	settings.apps = [
+			row for row in settings.apps
+			if row.app_name in installed_apps
+		]
+	
+	if len(settings.apps) != before_count:
+		changed = True
+
+	# refresh existing apps after cleanup
+	existing = {row.app_name for row in settings.apps}
+
+	# add newly installed apps
+	for app in installed_apps:
+		if app in existing:
 			continue
 
 		title = get_app_title(app)
@@ -28,9 +45,10 @@ def sync_installed_apps():
 			{
 				"app_name": app,
 				"original_app_name": title,
-				"display_name": "",
+				"display_name": DEFAULT_APP_DISPLAY_NAMES.get(title, title),
 			},
 		)
+
 		changed = True
 
 	if changed:

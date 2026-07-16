@@ -96,8 +96,7 @@ update_website_context = "brand_kit.utils.branding.update_website_context"
 # ------------------
 # Keeps "App UI Settings" in sync with whatever apps are actually installed, after every
 # bench migrate (the normal step after installing/removing any app).
-
-after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
+# after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
 
 # Boot Session
 # ------------
@@ -163,10 +162,10 @@ extend_bootinfo = "brand_kit.utils.app_ui_settings.extend_bootinfo"
 # Hook on document methods and events
 
 doc_events = {
-	# "Installed Applications": {
-	# 	"before_save": "brand_kit.utils.installed_apps_override.restore_custom_display_names",
-	# 	"on_update": "brand_kit.utils.installed_apps_override.sync_display_names_to_translations",
-	# }
+	"Installed Applications": {
+		# "before_save": "brand_kit.utils.installed_apps_override.restore_custom_display_names",
+		"on_update": "brand_kit.utils.app_ui_settings.sync_installed_apps",
+	},
 
 	"App UI Settings": {
 		"on_update": [
