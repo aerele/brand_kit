@@ -40,19 +40,18 @@ def sync_installed_apps(doc=None, method=None):
 		display_name = DEFAULT_APP_DISPLAY_NAMES.get(title, title)
 
 		settings.append(
-			"apps",
-			{
-				"app_name": app,
-				"original_app_name": title,
-				"display_name": display_name,
-			},
+		"apps",
+		{
+			"app_name": app,
+			"original_app_name": title,
+			"display_name": display_name,
+		},
 		)
 
 		changed = True
 
 	if changed:
 		settings.save(ignore_permissions=True)
-
 
 def setup_branding(app, display_name, logo=None):
 	field_map = {
@@ -147,6 +146,16 @@ def get_logo_asset_path(app_name):
 	relative = hooks[0]["logo"].split(f"/assets/{app_name}/", 1)[-1]
 	return frappe.get_app_path(app_name, "public", relative)
 
+def restore_original_logo(app_name):
+	dest = get_logo_asset_path(app_name)
+	if not dest:
+		return
+	
+	backup = dest + ".original"
+
+	if os.path.exists(backup):
+		shutil.copyfile(backup, dest)
+		os.remove(backup)
 
 def get_uploaded_file_path(file_url):
 	if file_url.startswith("/private/files/"):
