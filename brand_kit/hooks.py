@@ -1,8 +1,8 @@
 app_name = "brand_kit"
 app_title = "Brand Kit"
-app_publisher = "Local"
-app_description = "Centralized UI branding and white-labeling"
-app_email = "admin@example.com"
+app_publisher = "Aerele Technologies"
+app_description = "A custom application for whitelabeling"
+app_email = "hello@aerele.in"
 app_license = "mit"
 
 # Apps
@@ -27,9 +27,7 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/brand_kit/css/brand_kit.css"
 # app_include_js = "/assets/brand_kit/js/brand_kit.js"
-app_include_js = [
-    "/assets/brand_kit/js/brand_kit.js"
-]
+app_include_js = ["/assets/brand_kit/js/brand_kit.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/brand_kit/css/brand_kit.css"
@@ -109,7 +107,7 @@ extend_bootinfo = "brand_kit.utils.app_ui_settings.extend_bootinfo"
 # ------------
 
 # before_install = "brand_kit.install.before_install"
-# after_install = "brand_kit.install.after_install"
+after_install = "brand_kit.install.after_install"
 
 # Uninstallation
 # ------------
@@ -166,7 +164,6 @@ doc_events = {
 		# "before_save": "brand_kit.utils.installed_apps_override.restore_custom_display_names",
 		"on_update": "brand_kit.utils.app_ui_settings.sync_installed_apps",
 	},
-
 	"App UI Settings": {
 		"on_update": [
 			"brand_kit.utils.app_ui_settings.sync_display_names_to_translations",
@@ -284,4 +281,3 @@ doc_events = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

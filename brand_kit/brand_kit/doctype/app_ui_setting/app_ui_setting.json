@@ -1,6 +1,6 @@
 {
  "actions": [],
- "creation": "2026-07-08 00:00:00.000000",
+ "creation": "2026-07-08 00:00:00",
  "description": "One row per installed app, mapping its real name to an optional custom display name.",
  "doctype": "DocType",
  "document_type": "Other",
@@ -17,7 +17,6 @@
    "description": "Technical app identifier (e.g. crm, hrms, raven). Used internally to detect duplicates.",
    "fieldname": "app_name",
    "fieldtype": "Data",
-   "in_list_view": 0,
    "label": "App",
    "read_only": 1,
    "reqd": 1,
@@ -40,7 +39,7 @@
    "label": "Display Name"
   },
   {
-   "description": "Optional. Upload a custom logo to replace the app's default icon in the Desk sidebar.",
+   "description": "Optional. Upload a custom logo to replace the app's default icon in the Desk sidebar.\nRecommended size is 32x32 px in PNG or SVG",
    "fieldname": "logo",
    "fieldtype": "Attach Image",
    "label": "Logo"
@@ -48,12 +47,13 @@
  ],
  "istable": 1,
  "links": [],
- "modified": "2026-07-08 00:00:00.000000",
+ "modified": "2026-07-17 01:36:50.763236",
  "modified_by": "Administrator",
  "module": "Brand Kit",
  "name": "App UI Setting",
  "owner": "Administrator",
  "permissions": [],
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "ASC",
  "states": []
