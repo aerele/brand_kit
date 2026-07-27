@@ -16,6 +16,9 @@ def get_app_title(app):
 
 
 def sync_installed_apps(doc=None, method=None):
+	if not frappe.db.exists("Doctype", "App UI Settings"):
+		return
+	
 	settings = frappe.get_single("App UI Settings")
 	before_count = len(settings.apps)
 
@@ -52,6 +55,11 @@ def sync_installed_apps(doc=None, method=None):
 
 	if changed:
 		settings.save(ignore_permissions=True)
+		sync_display_names_to_translations(settings, None)
+		sync_logos_to_static_assets(settings, None)
+
+def after_app_install(app_name, *args, **kwargs):
+	sync_installed_apps()
 
 def setup_branding(app, display_name, logo=None):
 	field_map = {
@@ -90,12 +98,15 @@ def raven_branding(app, old_name="Raven", new_name=None, logo=None):
 		frappe.db.set_value("Raven Workspace", new_name, "logo", logo)
 
 
-def sync_display_names_to_translations(doc, method):
-	before = doc.get_doc_before_save()
-	old_values = {r.app_name: r.display_name for r in (before.apps if before else [])}
+def sync_display_names_to_translations(doc, method=None):
+	if method is None:
+		old_values = {}
+	else:
+		before = doc.get_doc_before_save()
+		old_values = {r.app_name: r.display_name for r in (before.apps if before else [])}
 
 	for row in doc.apps:
-		if row.display_name == old_values.get(row.app_name):
+		if method is not None and row.display_name == old_values.get(row.app_name):
 			continue  # unchanged for this app - skip entirely, no DB work
 
 		titles = set(get_apps_screen_titles(row.app_name))
@@ -163,12 +174,15 @@ def get_uploaded_file_path(file_url):
 	return frappe.get_site_path("public", "files", file_url.rsplit("/", 1)[-1])
 
 
-def sync_logos_to_static_assets(doc, method):
-	before = doc.get_doc_before_save()
-	old_logos = {r.app_name: r.logo for r in (before.apps if before else [])}
+def sync_logos_to_static_assets(doc, method=None):
+	if method is None:
+		old_logos = {}
+	else:
+		before = doc.get_doc_before_save()
+		old_logos = {r.app_name: r.logo for r in (before.apps if before else [])}
 
 	for row in doc.apps:
-		if row.logo == old_logos.get(row.app_name):
+		if method is not None and row.logo == old_logos.get(row.app_name):
 			continue
 
 		dest = get_logo_asset_path(row.app_name)

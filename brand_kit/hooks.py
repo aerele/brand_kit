@@ -95,6 +95,7 @@ update_website_context = "brand_kit.utils.branding.update_website_context"
 # Keeps "App UI Settings" in sync with whatever apps are actually installed, after every
 # bench migrate (the normal step after installing/removing any app).
 # after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
+after_migrate = ["brand_kit.utils.app_ui_settings.sync_installed_apps"]
 
 # Boot Session
 # ------------
@@ -121,7 +122,7 @@ after_install = "brand_kit.install.after_install"
 # Name of the app being installed is passed as an argument
 
 # before_app_install = "brand_kit.utils.before_app_install"
-# after_app_install = "brand_kit.utils.after_app_install"
+after_app_install = "brand_kit.utils.app_ui_settings.after_app_install"
 
 # Integration Cleanup
 # -------------------
